@@ -92,20 +92,7 @@ jobs:
           echo "LOGIN_TEST_PASSWORD=${{ secrets.LOGIN_TEST_PASSWORD }}" >> product/.env
 
       # Step 5: Chạy test cho service "product"
-      # Tối ưu: Không khởi động auth service thật, thay vào đó là mock JWT token trong test
-      - name: Start auth service for product tests
-        run: |
-          cd auth
-          npm install
-          echo "MONGODB_AUTH_URI=mongodb://localhost:27017/auth_test" > .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-          npm start &
-          sleep 5
-          # Create test user
-          curl -X POST http://localhost:3000/register \
-            -H "Content-Type: application/json" \
-            -d '{"username":"'${{ secrets.LOGIN_TEST_USER }}'","password":"'${{ secrets.LOGIN_TEST_PASSWORD }}'"}' || echo "User might already exist"
-            
+      # Tối ưu: Sử dụng JWT token generator thay vì phụ thuộc auth service
       - name: Run tests for product
         run: npm test --prefix product
 

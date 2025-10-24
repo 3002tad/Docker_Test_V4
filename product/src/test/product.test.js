@@ -1,6 +1,7 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const App = require("../app");
+const { generateTestToken } = require("./utils/testTokenGenerator");
 const expect = chai.expect;
 require("dotenv").config();
 
@@ -16,16 +17,15 @@ describe("Products", () => {
     await app.connectDB();
     // Skip message broker setup for simplified tests
 
+    // Generate test token directly instead of calling auth service
     try {
-      const authRes = await chai
-        .request("http://localhost:3000")
-        .post("/login")
-        .send({ username: process.env.LOGIN_TEST_USER, password: process.env.LOGIN_TEST_PASSWORD });
-
-      authToken = authRes.body.token;
-      console.log("Auth token:", authToken);
+      authToken = generateTestToken({
+        userId: "test-user-product-123",
+        username: process.env.LOGIN_TEST_USER || "testuser"
+      });
+      console.log("✅ Generated test token locally");
     } catch (error) {
-      console.error("Failed to authenticate:", error.message);
+      console.error("❌ Failed to generate test token:", error.message);
       authToken = undefined;
     }
     
