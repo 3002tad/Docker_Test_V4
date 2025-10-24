@@ -140,6 +140,5 @@ jobs:
           file: ./${{ matrix.service }}/Dockerfile
           push: true
           tags: 3002tad/eproject-${{ matrix.service }}:latest
-          platforms: linux/amd64
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
