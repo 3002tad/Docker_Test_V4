@@ -29,8 +29,10 @@ class AuthController {
       const result = await this.authService.login(username, password);
 
       if (result.success) {
+        console.log(`✅ Đăng nhập thành công - User: ${username} at ${new Date().toISOString()}`);
         res.json({ token: result.token });
       } else {
+        console.log(`❌ Đăng nhập thất bại - User: ${username} - Reason: ${result.message}`);
         res.status(400).json({ message: result.message });
       }
     } catch (err) {
@@ -53,9 +55,11 @@ class AuthController {
       const user = req.body;
       const result = await this.authService.register(user);
       if (result.success) {
+        console.log(`✅ Đăng ký thành công - User: ${username} - ID: ${result.newuser._id} at ${new Date().toISOString()}`);
         res.status(201).json(result.newuser);
       }
       else {
+        console.log(`❌ Đăng ký thất bại - User: ${username} - Reason: ${result.message}`);
         res.status(400).json({ message: result.message });
       }
     } catch (err) {

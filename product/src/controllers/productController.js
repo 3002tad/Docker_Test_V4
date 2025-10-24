@@ -22,8 +22,10 @@ class ProductController {
       
       const result = await this.productService.createProduct(product);
       if (!result.success) {
+        console.log(`❌ Tạo sản phẩm thất bại - Name: ${product.name} - Reason: ${result.message}`);
         return res.status(400).json({ message: result.message });
       }
+      console.log(`✅ Tạo sản phẩm thành công - Name: ${product.name} - ID: ${result.createdProduct._id} - Price: ${product.price} at ${new Date().toISOString()}`);
       res.status(201).json(result.createdProduct);
     } catch (error) {
       console.error(error);
